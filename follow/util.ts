@@ -25,6 +25,7 @@ const constructFollowResponse = (follow: HydratedDocument<Follow>): FollowerResp
     const following = followCopy.following.username;
 
     return{
+        ...followCopy,
         follower: follower,
         following: following
     };

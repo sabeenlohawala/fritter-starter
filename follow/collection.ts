@@ -2,7 +2,7 @@ import type {HydratedDocument, Types} from 'mongoose';
 import type {Follow} from './model';
 import FollowModel from './model';
 import UserCollection from '../user/collection';
-import FreetModel from 'freet/model';
+import FreetModel from '../freet/model';
 
 class FollowCollection{
     /**
@@ -35,6 +35,14 @@ class FollowCollection{
     static async deleteMany(user: Types.ObjectId | string): Promise<void>{
         await FreetModel.deleteMany({follower: user});
         await FreetModel.deleteMany({following: user});
+    }
+
+    /**
+     * Find a follow by follower and following
+     *
+     */
+    static async findOne(follower: Types.ObjectId | string, following: Types.ObjectId | string): Promise<HydratedDocument<Follow>> {
+        return FollowModel.findOne({follower: follower, following: following});
     }
 }
 
