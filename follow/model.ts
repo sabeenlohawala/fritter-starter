@@ -8,20 +8,22 @@ import type {User} from '../user/model';
 
 // Type definition for Follower on the backend
 export type Follow = {
-    // from follows to
     follower: Types.ObjectId;
     following: Types.ObjectId;
 };
 
+export type PopulatedFollow = {
+    follower: User;
+    following: User;
+  };
+
 const FollowSchema = new Schema({
-    // The user doing the following of "to"
     follower: {
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true
     },
 
-    // the user that is followed by "from"
     following: {
         type: Schema.Types.ObjectId,
         ref: "User",
