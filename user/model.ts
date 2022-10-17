@@ -12,6 +12,8 @@ export type User = {
   username: string;
   password: string;
   dateJoined: Date;
+  following?: [Types.ObjectId];
+  followers?: [Types.ObjectId];
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -33,6 +35,18 @@ const UserSchema = new Schema({
     type: Date,
     required: true
   }
+});
+
+UserSchema.virtual('following', {
+  ref: 'Follow',
+  localField: '_id',
+  foreignField: 'follower'
+});
+
+UserSchema.virtual('followers', {
+  ref: 'Follow',
+  localField: '_id',
+  foreignField: 'following'
 });
 
 const UserModel = model<User>('User', UserSchema);
