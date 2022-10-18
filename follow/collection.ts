@@ -40,6 +40,9 @@ class FollowCollection{
     /**
      * Find a follow by follower and following
      *
+     * @param follower - the user in the follower position
+     * @param following - the uesr in the following position
+     * @returns a follow obeying the above relationship
      */
     static async findOne(follower: Types.ObjectId | string, following: Types.ObjectId | string): Promise<HydratedDocument<Follow>> {
         return FollowModel.findOne({follower: follower, following: following});
@@ -49,7 +52,7 @@ class FollowCollection{
      * Find all the Follows for people who follow User (following = userId)
      *
      * @param {string} userId - The userId whose followers we want to find
-     * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
+     * @return {Promise<HydratedDocument<Follow>[]>} - An array of all of the Follows
      */
     static async findAllFollowersByUserId(userId: Types.ObjectId | string): Promise<Array<HydratedDocument<Follow>>> {
         return FollowModel.find({following: userId}).populate(['follower','following']);
@@ -59,7 +62,7 @@ class FollowCollection{
      * Find all the Follows for people who follow User (following = userId)
      *
      * @param {string} userId - The userId whose followers we want to find
-     * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
+     * @return {Promise<HydratedDocument<Follow>[]>} - An array of all of the Follows
      */
      static async findAllFollowingByUserId(userId: Types.ObjectId | string): Promise<Array<HydratedDocument<Follow>>> {
         return FollowModel.find({follower: userId}).populate(['follower','following']);
