@@ -52,7 +52,7 @@ class FollowCollection{
      * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
      */
     static async findAllFollowersByUserId(userId: Types.ObjectId | string): Promise<Array<HydratedDocument<Follow>>> {
-        return FollowModel.find({following: userId}).populate('following');
+        return FollowModel.find({following: userId}).populate(['follower','following']);
     }
 
     /**
@@ -62,7 +62,7 @@ class FollowCollection{
      * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
      */
      static async findAllFollowingByUserId(userId: Types.ObjectId | string): Promise<Array<HydratedDocument<Follow>>> {
-        return FollowModel.find({follower: userId}).populate('follower');
+        return FollowModel.find({follower: userId}).populate(['follower','following']);
     }
 }
 
