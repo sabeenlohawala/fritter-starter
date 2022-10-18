@@ -44,6 +44,26 @@ class FollowCollection{
     static async findOne(follower: Types.ObjectId | string, following: Types.ObjectId | string): Promise<HydratedDocument<Follow>> {
         return FollowModel.findOne({follower: follower, following: following});
     }
+
+    /**
+     * Find all the Follows for people who follow User (following = userId)
+     *
+     * @param {string} userId - The userId whose followers we want to find
+     * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
+     */
+    static async findAllFollowersByUserId(userId: Types.ObjectId | string): Promise<Array<HydratedDocument<Follow>>> {
+        return FollowModel.find({following: userId}).populate('following');
+    }
+
+    /**
+     * Find all the Follows for people who follow User (following = userId)
+     *
+     * @param {string} userId - The userId whose followers we want to find
+     * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
+     */
+     static async findAllFollowingByUserId(userId: Types.ObjectId | string): Promise<Array<HydratedDocument<Follow>>> {
+        return FollowModel.find({follower: userId}).populate('follower');
+    }
 }
 
 export default FollowCollection;

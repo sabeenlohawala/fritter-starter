@@ -79,4 +79,30 @@ router.delete(
     }
 );
 
+router.get(
+    '/followers',
+    [
+        userValidator.isUserLoggedIn,
+    ],
+    async (req:Request, res:Response) => {
+        const userId = (req.session.userId as string) ?? '';
+        const allFollowers = await FollowCollection.findAllFollowersByUserId(userId);
+        const response = allFollowers.map(util.constructFollowResponse);
+        res.status(200).json(response);
+    }
+)
+
+router.get(
+    '/following',
+    [
+        userValidator.isUserLoggedIn,
+    ],
+    async (req:Request, res:Response) => {
+        const userId = (req.session.userId as string) ?? '';
+        const allFollowing = await FollowCollection.findAllFollowingByUserId(userId);
+        const response = allFollowing.map(util.constructFollowResponse);
+        res.status(200).json(response);
+    }
+)
+
 export {router as followRouter};

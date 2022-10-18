@@ -42,6 +42,8 @@ const formsAndHandlers = {
   'follow-user': followUser,
   'unfollow-user': unfollowUser,
   'remove-follower': removeFollower,
+  'view-all-followers': viewAllFollowers,
+  'view-all-following': viewAllFollowing,
 };
 
 // Attach handlers to forms

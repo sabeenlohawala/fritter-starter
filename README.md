@@ -214,6 +214,24 @@ The following are API routes that I have implemented:
 - `404` if a user with `username` does not exist
 - `404` if the follow does not exist
 
+#### `GET /api/follows/followers` - View all follow relationships where following = userId
+
+**Returns**
+- A success message
+- An array of follow relationships where following = the user who is logged in
+
+**Throws**
+- `403` if the user is not logged in
+
+#### `GET /api/follows/following` - View all follow relationships where follower = userId
+
+**Returns**
+- A success message
+- An array of follow relationships where follower = the user who is logged in
+
+**Throws**
+- `403` if the user is not logged in
+
 #### `POST /api/circles` - Create a new circle
 
 **Body**

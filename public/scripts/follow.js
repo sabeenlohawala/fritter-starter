@@ -15,3 +15,15 @@ function removeFollower(fields) {
         .then(showResponse)
         .catch(showResponse);
 }
+
+function viewAllFollowers(fields) {
+    fetch('/api/follows/followers', {method: 'GET'})
+      .then(showResponse)
+      .catch(showResponse);
+}
+
+function viewAllFollowing(fields) {
+    fetch('/api/follows/following', {method: 'GET'})
+      .then(showResponse)
+      .catch(showResponse);
+}
