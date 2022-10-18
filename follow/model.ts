@@ -18,12 +18,14 @@ export type PopulatedFollow = {
   };
 
 const FollowSchema = new Schema({
+    // the user doing the following
     follower: {
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true
     },
 
+    // the user being followed
     following: {
         type: Schema.Types.ObjectId,
         ref: "User",
