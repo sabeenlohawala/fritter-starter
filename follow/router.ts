@@ -58,7 +58,7 @@ router.delete(
 );
 
 /**
- * Unfollow a user.
+ * Remove a user from your followers.
  */
  router.delete(
     '/follower/:username?',

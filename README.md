@@ -169,6 +169,51 @@ within the schema. This tells us that the `content` field must have type `String
 
 ## API routes
 
+The following are API routes that I have implemented:
+
+#### `POST /api/follows/` - Create a new follow relationship
+
+**Body**
+- `username` _{string}_ - the username of the account to follow
+
+**Returns**
+- A success message
+- An object with the created follow relationship
+
+**Throws**
+- `403` if the user is not logged in
+- `400` if `username` is not provided
+- `404` if a user with `username` does not exist
+- `409` if the follow relationship already exists
+
+#### `DELETE /api/follows/following/:username?` - Delete a follow relationship by unfollowing user
+
+**Body**
+- `username` _{string}_ - the username of the account to unfollow
+
+**Returns**
+- A success message
+
+**Throws**
+- `403` if the user is not logged in
+- `400` if `username` is not provided
+- `404` if a user with `username` does not exist
+- `404` if the follow does not exist
+
+#### `DELETE /api/follows/followers/:username?` - Delete a follow relationship by removing from followers
+
+**Body**
+- `username` _{string}_ - the username of the account to remove from followers
+
+**Returns**
+- A success message
+
+**Throws**
+- `403` if the user is not logged in
+- `400` if `username` is not provided
+- `404` if a user with `username` does not exist
+- `404` if the follow does not exist
+
 The following api routes have already been implemented for you (**Make sure to document all the routes that you have added.**):
 
 #### `GET /`
