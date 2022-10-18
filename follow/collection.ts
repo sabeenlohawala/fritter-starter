@@ -30,11 +30,11 @@ class FollowCollection{
 
     /**
      * Delete all follow relationships containing the user
-     * @param user - the user whose relationships are to be deleted
+     * @param userId - the user whose relationships are to be deleted
      */
-    static async deleteMany(user: Types.ObjectId | string): Promise<void>{
-        await FreetModel.deleteMany({follower: user});
-        await FreetModel.deleteMany({following: user});
+    static async deleteMany(userId: Types.ObjectId | string): Promise<void>{
+        await FollowModel.deleteMany({follower: userId});
+        await FollowModel.deleteMany({following: userId});
     }
 
     /**
