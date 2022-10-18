@@ -214,6 +214,93 @@ The following are API routes that I have implemented:
 - `404` if a user with `username` does not exist
 - `404` if the follow does not exist
 
+#### `POST /api/circles` - Create a new circle
+
+**Body**
+- `circlename` _{string}_ - the name of the circle that's being created
+
+**Returns**
+- A success message
+- An object containing the created Circle
+
+**Throws**
+- `403` if the user is not logged in
+- `400` if circlename is not provided
+- `409` if a circle with `circlename` already exists for the user
+
+#### `DELETE /api/circles/:circlename?` - Delete a Circle
+
+**Body**
+- `circlename` _{string}_ - the name of the circle to delete
+
+**Returns**
+- A success message
+
+**Throws**
+- `403` if the user is not logged in
+- `400` if `circlename` is not provided
+- `404` if a circle with `circlename` does not exist
+
+#### `PUT /api/circles/:circlename?` - Delete a follow relationship by removing from followers
+
+**Body**
+- `username` _{string}_ - the username of the account to add to circle
+
+**Returns**
+- A success message
+
+**Throws**
+- `403` if the user is not logged in
+- `400` if `username` is not provided
+- `404` if a user with `username` does not exist
+- `404` if a circle with `circlename` does not exist
+- `409` if the user is already in the circle
+
+#### `DELETE /api/circles/:circlename?` - Remove a user from the circle
+
+**Body**
+- `username` _{string}_ - the username of the account to remove from cirlce
+
+**Returns**
+- A success message
+
+**Throws**
+- `403` if the user is not logged in
+- `400` if `username` is not provided
+- `404` if a user with `username` does not exist
+- `404` if a circle with `circlename` does not exist
+- `404` if the user is not in the circle
+
+#### `PUT /api/freets/:freetId?` - Update the content or access of a freet
+
+**Body**
+- `content` _{string}_ - the updated content of freet, if any
+- `circlename` -{string}_ - the circle to provide access to, if any
+
+**Returns**
+- A success message
+- An object containing the Freet
+
+**Throws**
+- `403` if the user is not logged in
+- `404` if a freet with `freetId` does not exist
+- `404` if a circle with `circlename` does not exist
+- `409` if the circle already has access
+
+#### `DELETE /api/freets/:freetId?` - Remove Freet access
+
+**Body**
+- `circlename` _{string}_ - the circlename of the circle to remove access for
+
+**Returns**
+- A success message
+
+**Throws**
+- `403` if the user is not logged in
+- `400` if `circlename` is not provided
+- `404` if a circle with `circlename` does not exist
+- `409` if the circle does not already have access
+
 The following api routes have already been implemented for you (**Make sure to document all the routes that you have added.**):
 
 #### `GET /`
