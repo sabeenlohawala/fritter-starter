@@ -11,11 +11,16 @@ const router = express.Router();
 
 /**
  * Follow a user
- * 
+ *
  * @name POST /api/follows
- * @return {FollowResponse}
+ *
+ * @param {string} username - The username of the user to follow
+ * @return {FollowResponse} - The created freet
+ * @throws {403} - If the user is not logged in
+ * @throws {400} - If username is not provided
+ * @throws {404} - If username does not exist
+ * @throws {409} - If follow relation already exists
  */
-
 router.post(
     '/',
     [
@@ -37,6 +42,14 @@ router.post(
 
 /**
  * Unfollow a user.
+ *
+ * @name DELETE /api/follows/:username
+ *
+ * @return {string} - A success message
+ * @throws {403} - If the user is not logged in
+ * @throws {400} - If username is not provided
+ * @throws {404} - If username does not exist
+ * @throws {404} - If follow relationship does not exist
  */
 router.delete(
     '/following/:username?',
@@ -58,7 +71,15 @@ router.delete(
 );
 
 /**
- * Remove a user from your followers.
+ * Remove a user from the logged in user's followers.
+ *
+ * @name DELETE /api/follows/:username
+ *
+ * @return {string} - A success message
+ * @throws {403} - If the user is not logged in
+ * @throws {400} - If username is not provided
+ * @throws {404} - If username does not exist
+ * @throws {404} - If follow relationship does not exist
  */
  router.delete(
     '/follower/:username?',
@@ -79,6 +100,15 @@ router.delete(
     }
 );
 
+/**
+ * Get all of user's followers.
+ *
+ * @name GET /api/follows/followers
+ *
+ * @return {FollowResponse[]} - An array of follows where following = user
+ * @throws {403} - If user not logged in
+ *
+ */
 router.get(
     '/followers',
     [
@@ -92,6 +122,15 @@ router.get(
     }
 )
 
+/**
+ * Get all of the users that the logged in user is following.
+ *
+ * @name GET /api/follows/following
+ *
+ * @return {FollowResponse[]} - An array of follows where follower = user
+ * @throws {403} - If user not logged in
+ *
+ */
 router.get(
     '/following',
     [
