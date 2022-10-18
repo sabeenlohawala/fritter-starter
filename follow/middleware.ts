@@ -5,7 +5,7 @@ import FollowCollection from '../follow/collection'
 
 
 /**
- * Checks if a follow with userId as username in req.params exists
+ * Checks if a follow with userId as username in req.body exists
  */
  const isFollowAlreadyExists = async (req: Request, res: Response, next: NextFunction) => {
     const userId = (req.session.userId as string) ?? '';
@@ -24,6 +24,9 @@ import FollowCollection from '../follow/collection'
     return;
 };
 
+/**
+ * Checks if a follow with userId as username in req.params as following does not exist
+ */
 const isFollowDoesNotExist = async(req: Request, res: Response, next: NextFunction) => {
     console.log('follow')
     const userId = (req.session.userId as string) ?? '';
@@ -41,6 +44,9 @@ const isFollowDoesNotExist = async(req: Request, res: Response, next: NextFuncti
     next();
 };
 
+/**
+ * Checks if a follow with userId with username in req.params as follower does not exist
+ */
 const isFollowerDoesNotExist = async(req: Request, res: Response, next: NextFunction) => {
     console.log('follow')
     const userId = (req.session.userId as string) ?? '';
