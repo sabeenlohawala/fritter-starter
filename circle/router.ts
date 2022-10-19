@@ -21,7 +21,8 @@ const router = express.Router();
  * @throws {403} - If the user is not logged in
  * @throws {400} - If username is not provided
  * @throws {404} - If username does not exist
- * @throws {409} - If follow relation already exists
+ * @throws {404} - If follow relation does not exist
+ * @throws {409} - If circle already exists
  */
  router.post(
     '/',
@@ -40,6 +41,36 @@ const router = express.Router();
         res.status(201).json({
             message: `You added ${req.body.username} to ${circlename} successfully.`,
             follow: util.constructCircleResponse(circle)
+        });
+    }
+);
+
+/**
+ * Remove a user from a circle
+ *
+ * @name DELETE /api/circles/:circlename/:username
+ *
+ * @return {string} - A success message
+ * @throws {403} - If the user is not logged in
+ * @throws {400} - If username is not provided
+ * @throws {404} - If username does not exist
+ * @throws {404} - If follow relationship does not exist
+ */
+ router.delete(
+    '/:circlename?/:username?',
+    [
+        userValidator.isUserLoggedIn,
+        userValidator.isUserParamExists,
+        circleValidator.isCircleDoesNotExist,
+    ],
+    async (req: Request, res: Response) => {
+        const userId = (req.session.userId as string) ?? '';
+        const circlename = req.params.circlename;
+        const member = await UserCollection.findOneByUsername(req.params.username);
+        await CircleCollection.deleteOne(circlename,userId,member._id);
+
+        res.status(200).json({
+            message: `Your removed ${req.params.username} from Circle ${circlename} successfully.`,
         });
     }
 );

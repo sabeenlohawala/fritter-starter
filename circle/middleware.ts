@@ -24,6 +24,33 @@ import CircleCollection from './collection';
     return;
 };
 
+/**
+ * Checks if a circle with circlename and member as username in req.params as following does not exist
+ */
+ const isCircleDoesNotExist = async(req: Request, res: Response, next: NextFunction) => {
+    if (!req.params.circlename) {
+        res.status(400).json({
+          error: 'Provided circlename must be nonempty.'
+        });
+        return;
+    }
+
+    const userId = (req.session.userId as string) ?? '';
+    const member = await UserCollection.findOneByUsername(req.params.username);
+    const circle = await CircleCollection.findOne(req.params.circlename, userId, member._id);
+
+    if (!circle){
+        res.status(404).json({
+            error: {
+                circleNotFound: `The user ${req.params.username} is not in a circle ${req.params.circlename}.`
+            }
+        });
+        return;
+    }
+    next();
+};
+
 export{
     isCircleAlreadyExists,
+    isCircleDoesNotExist
 }
