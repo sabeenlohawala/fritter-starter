@@ -46,6 +46,10 @@ const formsAndHandlers = {
   'view-all-following': viewAllFollowing,
   'add-to-circle': addToCircle,
   'remove-from-circle': removeFromCircle,
+  'view-all-circles': viewAllCircles,
+  'view-circles-by-circlename': viewCirclesByCirclename,
+  'view-circles-by-member': viewCirclesByMember,
+  'delete-circle': deleteCircle
 };
 
 // Attach handlers to forms

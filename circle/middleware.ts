@@ -11,7 +11,7 @@ import CircleCollection from './collection';
     const userId = (req.session.userId as string) ?? '';
     const member = await UserCollection.findOneByUsername(req.body.username);
 
-    const circle = await CircleCollection.findOne(req.body.circlename, userId, member._id);
+    const circle = await CircleCollection.findOneMembership(req.body.circlename, userId, member._id);
 
     if (!circle){
         next();
@@ -27,7 +27,7 @@ import CircleCollection from './collection';
 /**
  * Checks if a circle with circlename and member as username in req.params as following does not exist
  */
- const isCircleDoesNotExist = async(req: Request, res: Response, next: NextFunction) => {
+ const isCircleMemberDoesNotExist = async(req: Request, res: Response, next: NextFunction) => {
     if (!req.params.circlename) {
         res.status(400).json({
           error: 'Provided circlename must be nonempty.'
@@ -37,7 +37,7 @@ import CircleCollection from './collection';
 
     const userId = (req.session.userId as string) ?? '';
     const member = await UserCollection.findOneByUsername(req.params.username);
-    const circle = await CircleCollection.findOne(req.params.circlename, userId, member._id);
+    const circle = await CircleCollection.findOneMembership(req.params.circlename, userId, member._id);
 
     if (!circle){
         res.status(404).json({
@@ -50,7 +50,55 @@ import CircleCollection from './collection';
     next();
 };
 
+const isCircleParamExists = async(req:Request, res:Response, next:NextFunction) => {
+    console.log('param')
+    if (!req.params.circlename){
+        res.status(400).json({
+            error: 'Provided circlename must be nonempty.'
+        });
+        return;
+    }
+
+    const userId = (req.session.userId as string) ?? '';
+    const circle = await CircleCollection.findOne(req.params.circlename, userId);
+
+    if (!circle){
+        res.status(404).json({
+            error: {
+                circleNotFound: `The circle ${req.params.circlename} does not exist.`
+            }
+        });
+        return;
+    }
+    next();
+}
+
+const isCircleQueryExists = async(req:Request, res:Response, next:NextFunction) => {
+    console.log('query')
+    if (!req.query.circlename){
+        res.status(400).json({
+            error: 'Provided circlename must be nonempty.'
+        });
+        return;
+    }
+
+    const userId = (req.session.userId as string) ?? '';
+    const circle = await CircleCollection.findOne(req.query.circlename as string, userId);
+
+    if (!circle){
+        res.status(404).json({
+            error: {
+                circleNotFound: `The circle ${req.query.circlename as string} does not exist.`
+            }
+        });
+        return;
+    }
+    next();
+}
+
 export{
     isCircleAlreadyExists,
-    isCircleDoesNotExist
+    isCircleMemberDoesNotExist,
+    isCircleParamExists,
+    isCircleQueryExists
 }

@@ -59,7 +59,6 @@ router.delete(
         followValidator.isFollowDoesNotExist,
     ],
     async (req: Request, res: Response) => {
-        console.log('inside')
         const userId = (req.session.userId as string) ?? '';
         const following = await UserCollection.findOneByUsername(req.params.username);
         await FollowCollection.deleteOne(userId,following._id);
@@ -89,7 +88,6 @@ router.delete(
         followValidator.isFollowerDoesNotExist,
     ],
     async (req: Request, res: Response) => {
-        console.log('inside')
         const userId = (req.session.userId as string) ?? '';
         const following = await UserCollection.findOneByUsername(req.params.username);
         await FollowCollection.deleteOne(following._id,userId);
