@@ -44,6 +44,7 @@ const formsAndHandlers = {
   'remove-follower': removeFollower,
   'view-all-followers': viewAllFollowers,
   'view-all-following': viewAllFollowing,
+  'add-to-circle': addToCircle,
 };
 
 // Attach handlers to forms

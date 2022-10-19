@@ -8,6 +8,7 @@
   <script src="/scripts/freet.js"></script>
   <script src="/scripts/user.js"></script>
   <script src="/scripts/follow.js"></script>
+  <script src="/scripts/circle.js"></script>
   <script src="/scripts/index.js"></script>
 </head>
 
@@ -20,6 +21,19 @@
     <section id="operations-container">
       <h2>Operations:</h2>
       <div class="scrollbox">
+
+        <form id="add-to-circle">
+          <h3>Add User to Circle</h3>
+          <div>
+            <label for="circlename">Circle Name:</label>
+            <input id="circlename" name="circlename">
+          </div>
+          <div>
+            <label for="username">Username:</label>
+            <input id="username" name="username">
+          </div>
+          <input type="submit" value="Add User to Circle">
+        </form>
 
         <form id="follow-user">
           <h3>Follow User</h3>
