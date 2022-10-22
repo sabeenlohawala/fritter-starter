@@ -5,7 +5,7 @@ import FollowCollection from '../follow/collection'
 
 
 /**
- * Checks if a follow with userId as username in req.body exists
+ * Checks if a follow with userId as follower and username in req.body as following exists
  */
  const isFollowAlreadyExists = async (req: Request, res: Response, next: NextFunction) => {
     const userId = (req.session.userId as string) ?? '';
@@ -25,7 +25,7 @@ import FollowCollection from '../follow/collection'
 };
 
 /**
- * Checks if a follow with userId as username in req.params as following does not exist
+ * Checks if a follow with userId as follower and username in req.params as following does not exist
  */
 const isFollowDoesNotExist = async(req: Request, res: Response, next: NextFunction) => {
     const userId = (req.session.userId as string) ?? '';
@@ -44,12 +44,12 @@ const isFollowDoesNotExist = async(req: Request, res: Response, next: NextFuncti
 };
 
 /**
- * Checks if a follow with userId with username in req.params as follower does not exist
+ * Checks if a follow with userId as following and username in req.params as follower does not exist
  */
 const isFollowerDoesNotExist = async(req: Request, res: Response, next: NextFunction) => {
     const userId = (req.session.userId as string) ?? '';
-    const following = await UserCollection.findOneByUsername(req.params.username);
-    const follow = await FollowCollection.findOne(following._id,userId);
+    const follower = await UserCollection.findOneByUsername(req.params.username);
+    const follow = await FollowCollection.findOne(follower._id,userId);
 
     if (!follow){
         res.status(404).json({

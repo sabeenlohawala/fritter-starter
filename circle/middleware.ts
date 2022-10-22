@@ -5,7 +5,7 @@ import FollowCollection from '../follow/collection'
 import CircleCollection from './collection';
 
 /**
- * Checks if a circle with circlename and member as username in req.body exists
+ * Checks if a circle with circlename and member as username in req.body with logged in user as owner exists
  */
  const isCircleAlreadyExists = async (req: Request, res: Response, next: NextFunction) => {
     const userId = (req.session.userId as string) ?? '';
@@ -26,6 +26,7 @@ import CircleCollection from './collection';
 
 /**
  * Checks if a circle with circlename and member as username in req.params as following does not exist
+ * for logged in user.
  */
  const isCircleMemberDoesNotExist = async(req: Request, res: Response, next: NextFunction) => {
     if (!req.params.circlename) {
@@ -50,6 +51,9 @@ import CircleCollection from './collection';
     next();
 };
 
+/**
+ * Checks if user has any circle with circlename provided in req.params.
+ */
 const isCircleParamExists = async(req:Request, res:Response, next:NextFunction) => {
     console.log('param')
     if (!req.params.circlename){
@@ -73,6 +77,9 @@ const isCircleParamExists = async(req:Request, res:Response, next:NextFunction) 
     next();
 }
 
+/**
+ * Checks if user has any circle with circlename provided in req.query.
+ */
 const isCircleQueryExists = async(req:Request, res:Response, next:NextFunction) => {
     console.log('query')
     if (!req.query.circlename){

@@ -154,7 +154,7 @@ const isAuthorExists = async (req: Request, res: Response, next: NextFunction) =
 };
 
 /**
- * Checks if a user with userId as author id in req.body exists
+ * Checks if a user with username in req.body exists
  */
  const isUserExists = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.body.username) {
@@ -176,7 +176,7 @@ const isAuthorExists = async (req: Request, res: Response, next: NextFunction) =
 };
 
 /**
- * Checks if a user with userId as author id in req.params exists
+ * Checks if a user with username in req.params exists
  */
  const isUserParamExists = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.params.username) {

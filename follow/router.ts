@@ -11,7 +11,7 @@ import * as util from './util';
 const router = express.Router();
 
 /**
- * Follow a user
+ * Follow a user.
  *
  * @name POST /api/follows
  *
@@ -19,7 +19,8 @@ const router = express.Router();
  * @return {FollowResponse} - The created freet
  * @throws {403} - If the user is not logged in
  * @throws {400} - If username is not provided
- * @throws {404} - If username does not exist
+ * @throws {404} - If user with username does not exist
+ * @throws {409} - If the username belongs to the logged in user
  * @throws {409} - If follow relation already exists
  */
 router.post(
@@ -50,7 +51,8 @@ router.post(
  * @return {string} - A success message
  * @throws {403} - If the user is not logged in
  * @throws {400} - If username is not provided
- * @throws {404} - If username does not exist
+ * @throws {404} - If user with username does not exist
+ * @throws {409} - If the username belongs to the logged in user
  * @throws {404} - If follow relationship does not exist
  */
 router.delete(
@@ -87,7 +89,8 @@ router.delete(
  * @return {string} - A success message
  * @throws {403} - If the user is not logged in
  * @throws {400} - If username is not provided
- * @throws {404} - If username does not exist
+ * @throws {404} - If user with username does not exist
+ * @throws {409} - If username belongs to logged in user
  * @throws {404} - If follow relationship does not exist
  */
  router.delete(

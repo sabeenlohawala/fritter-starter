@@ -19,10 +19,12 @@ const router = express.Router();
  * @param {string} username - The username of the user to add
  * @return {CircleResponse} - The created circle
  * @throws {403} - If the user is not logged in
+ * @throws {400} - If circlename is not provided
  * @throws {400} - If username is not provided
  * @throws {404} - If username does not exist
  * @throws {404} - If follow relation does not exist
  * @throws {409} - If circle already exists
+ * @throws {409} - If the username belongs to the logged in user
  */
  router.post(
     '/',
@@ -54,8 +56,10 @@ const router = express.Router();
  * @return {string} - A success message
  * @throws {403} - If the user is not logged in
  * @throws {400} - If username is not provided
- * @throws {404} - If username does not exist
+ * @throws {400} - If circlename is not provided
+ * @throws {404} - If user with username does not exist
  * @throws {404} - If circle membership does not exist
+ * @throws {409} - If username belongs to logged in user
  */
  router.delete(
     '/:circlename?/members/:username?',
@@ -84,8 +88,7 @@ const router = express.Router();
  *
  * @return {string} - A success message
  * @throws {403} - If the user is not logged in
- * @throws {400} - If username is not provided
- * @throws {404} - If username does not exist
+ * @throws {400} - If circlename is not provided
  * @throws {404} - If circle membership does not exist
  */
  router.delete(
@@ -155,8 +158,10 @@ const router = express.Router();
  * @name GET /api/circles/members?username=username
  *
  * @return {CircleResponse[]} - An array of circles containing member with username created by user
+ * @throws {403} - If the user is not logged in
  * @throws {400} - If username is not given
- * @throws {404} - If no user has given authorId
+ * @throws {404} - If user with `username` does not exist
+ * @throws {409} - If username belongs to the logged in user
  *
  */
  router.get(
