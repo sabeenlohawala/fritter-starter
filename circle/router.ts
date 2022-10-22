@@ -29,6 +29,7 @@ const router = express.Router();
     [
         userValidator.isUserLoggedIn,
         userValidator.isUserExists,
+        userValidator.isBodyNotEqualLoggedInUser,
         followValidator.isFollowRelationDoesNotExist,
         circleValidator.isCircleAlreadyExists
     ],
@@ -61,6 +62,7 @@ const router = express.Router();
     [
         userValidator.isUserLoggedIn,
         userValidator.isUserParamExists,
+        userValidator.isParamsNotEqualLoggedInUser,
         circleValidator.isCircleMemberDoesNotExist,
     ],
     async (req: Request, res: Response) => {
@@ -162,6 +164,7 @@ const router = express.Router();
     [
         userValidator.isUserLoggedIn,
         userValidator.isUserQueryExists,
+        userValidator.isQueryNotEqualLoggedInUser,
     ],
     async (req: Request, res: Response) => {
         const userId = (req.session.userId as string) ?? '';

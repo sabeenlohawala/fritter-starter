@@ -219,6 +219,60 @@ const isAuthorExists = async (req: Request, res: Response, next: NextFunction) =
   next();
 };
 
+const isBodyNotEqualLoggedInUser = async(req:Request, res:Response, next: NextFunction) => {
+  const loggedInUser = await UserCollection.findOneByUserId((req.session.userId as string) ?? '')
+  if (!req.body.username){
+    res.status(400).json({
+      error: 'Provided username must be nonempty.'
+    });
+    return;
+  }
+
+  if (loggedInUser.username == req.body.username){
+    res.status(409).json({
+      error: `The provided user must be different from yourself.`
+    });
+    return;
+  }
+  next();
+}
+
+const isParamsNotEqualLoggedInUser = async(req:Request, res:Response, next: NextFunction) => {
+  const loggedInUser = await UserCollection.findOneByUserId((req.session.userId as string) ?? '')
+  if (!req.params.username){
+    res.status(400).json({
+      error: 'Provided username must be nonempty.'
+    });
+    return;
+  }
+
+  if (loggedInUser.username == req.params.username){
+    res.status(409).json({
+      error: `The provided user must be different from yourself.`
+    });
+    return;
+  }
+  next();
+}
+
+const isQueryNotEqualLoggedInUser = async(req:Request, res:Response, next: NextFunction) => {
+  const loggedInUser = await UserCollection.findOneByUserId((req.session.userId as string) ?? '')
+  if (!req.query.username){
+    res.status(400).json({
+      error: 'Provided username must be nonempty.'
+    });
+    return;
+  }
+
+  if (loggedInUser.username == req.query.username){
+    res.status(409).json({
+      error: `The provided user must be different from yourself.`
+    });
+    return;
+  }
+  next();
+}
+
 export {
   isCurrentSessionUserExists,
   isUserLoggedIn,
@@ -230,5 +284,8 @@ export {
   isValidPassword,
   isUserExists,
   isUserParamExists,
-  isUserQueryExists
+  isUserQueryExists,
+  isBodyNotEqualLoggedInUser,
+  isParamsNotEqualLoggedInUser,
+  isQueryNotEqualLoggedInUser
 };

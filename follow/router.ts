@@ -27,6 +27,7 @@ router.post(
     [
         userValidator.isUserLoggedIn,
         userValidator.isUserExists,
+        userValidator.isBodyNotEqualLoggedInUser,
         followValidator.isFollowAlreadyExists
     ],
     async (req: Request, res: Response) => {
@@ -57,6 +58,7 @@ router.delete(
     [
         userValidator.isUserLoggedIn,
         userValidator.isUserParamExists,
+        userValidator.isParamsNotEqualLoggedInUser,
         followValidator.isFollowDoesNotExist,
     ],
     async (req: Request, res: Response) => {
@@ -93,6 +95,7 @@ router.delete(
     [
         userValidator.isUserLoggedIn,
         userValidator.isUserParamExists,
+        userValidator.isParamsNotEqualLoggedInUser,
         followValidator.isFollowerDoesNotExist,
     ],
     async (req: Request, res: Response) => {
