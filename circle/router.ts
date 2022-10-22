@@ -2,7 +2,7 @@ import type {NextFunction, Request, Response} from 'express';
 import express from 'express';
 import CircleCollection from '../circle/collection';
 import UserCollection from '../user/collection';
-import FollowCollection from './collection';
+import FollowCollection from '../follow/collection';
 import * as userValidator from '../user/middleware';
 import * as followValidator from '../follow/middleware';
 import * as circleValidator from '../circle/middleware';

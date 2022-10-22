@@ -9,6 +9,7 @@
   <script src="/scripts/user.js"></script>
   <script src="/scripts/follow.js"></script>
   <script src="/scripts/circle.js"></script>
+  <script src="/scripts/mute.js"></script>
   <script src="/scripts/index.js"></script>
 </head>
 
@@ -21,6 +22,39 @@
     <section id="operations-container">
       <h2>Operations:</h2>
       <div class="scrollbox">
+
+        <form id="create-mute">
+          <h3>Create Mute</h3>
+          <div>
+            <label for="phrase">Word or Phrase:</label>
+            <input id="phrase" name="phrase">
+          </div>
+          <div>
+            <label for="account">Account:</label>
+            <input id="account" name="account">
+          </div>
+          <div>
+            <label for="circlename">Circle Name:</label>
+            <input id="circlename" name="circlename">
+          </div>
+          <div>
+            <label for="durationHours">Number of Hours:</label>
+            <input id="durationHours" name="durationHours">
+            <label for="durationMins">Number of Minutes:</label>
+            <input id="durationMins" name="durationMins">
+          </div>
+          <div>
+            <label for="startHours">Time Period Start - Hours:</label>
+            <input id="startHours" name="startHours">
+            <label for="startMins">Time Period Start - Minutes:</label>
+            <input id="startMins" name="startMins">
+            <label for="endHours">Time Period End - Hours:</label>
+            <input id="endHours" name="endHours">
+            <label for="endMins">Time Period End - Minutes:</label>
+            <input id="endMins" name="endMins">
+          </div>
+          <input type="submit" value="Create Mute">
+        </form>
 
         <form id="add-to-circle">
           <h3>Add User to Circle</h3>
