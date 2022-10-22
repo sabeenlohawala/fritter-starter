@@ -171,6 +171,8 @@ within the schema. This tells us that the `content` field must have type `String
 
 The following are API routes that I have implemented:
 
+### Follow Concept ###
+
 #### `POST /api/follows/` - Create a new follow relationship
 
 **Body**
@@ -181,10 +183,11 @@ The following are API routes that I have implemented:
 - An object with the created follow relationship
 
 **Throws**
-- `403` if the user is not logged in
-- `400` if `username` is not provided
-- `404` if a user with `username` does not exist
-- `409` if the follow relationship already exists
+- `403` If the user is not logged in
+- `400` If username is not provided
+- `404` If username does not exist
+- `409` If the username belongs to the logged in user
+- `409` If follow relation already exists
 
 #### `DELETE /api/follows/following/:username?` - Delete a follow relationship by unfollowing user
 
@@ -195,10 +198,11 @@ The following are API routes that I have implemented:
 - A success message
 
 **Throws**
-- `403` if the user is not logged in
-- `400` if `username` is not provided
-- `404` if a user with `username` does not exist
-- `404` if the follow does not exist
+- `403` If the user is not logged in
+- `400` If username is not provided
+- `404` If user with username does not exist
+- `409` If the username belongs to the logged in user
+- `404` If follow relationship does not exist
 
 #### `DELETE /api/follows/followers/:username?` - Delete a follow relationship by removing from followers
 
@@ -212,6 +216,7 @@ The following are API routes that I have implemented:
 - `403` if the user is not logged in
 - `400` if `username` is not provided
 - `404` if a user with `username` does not exist
+- `409` If the username belongs to the logged in user
 - `404` if the follow does not exist
 
 #### `GET /api/follows/followers` - View all follow relationships where following = userId
@@ -232,10 +237,14 @@ The following are API routes that I have implemented:
 **Throws**
 - `403` if the user is not logged in
 
+### Circles Concept ###
+`POST /api/circles` 
+
 #### `POST /api/circles` - Create a new circle
 
 **Body**
 - `circlename` _{string}_ - the name of the circle that's being created
+- `username` _{string}_ - the username of the user that's being added to the circle
 
 **Returns**
 - A success message
@@ -244,12 +253,13 @@ The following are API routes that I have implemented:
 **Throws**
 - `403` if the user is not logged in
 - `400` if circlename is not provided
-- `409` if a circle with `circlename` already exists for the user
+- `400` if username is not provided
+- `404` if user with `username` does not exist
+- `404` if follow relation does not exist between `username` and logged in user
+- `409` if a circle with `circlename` and member with `username` already exists for the logged in user
+- `409` if the username belongs to the logged in user
 
-#### `DELETE /api/circles/:circlename?` - Delete a Circle
-
-**Body**
-- `circlename` _{string}_ - the name of the circle to delete
+#### `DELETE /api/circles/:circlename/members/:username` - Remove a user with `username` from the circle
 
 **Returns**
 - A success message
@@ -257,37 +267,51 @@ The following are API routes that I have implemented:
 **Throws**
 - `403` if the user is not logged in
 - `400` if `circlename` is not provided
+- `400` if the `username` is not provided
 - `404` if a circle with `circlename` does not exist
+- `404` if user with `username` does not exist
+- `404` if circle membership does not exist
+- `409` if username belongs to logged in user
 
-#### `PUT /api/circles/:circlename?` - Delete a follow relationship by removing from followers
-
-**Body**
-- `username` _{string}_ - the username of the account to add to circle
+#### `DELETE /api/circles/:circlename/` - Delete a Circle with name `circlename` whose owner is the logged in user
 
 **Returns**
 - A success message
 
 **Throws**
-- `403` if the user is not logged in
-- `400` if `username` is not provided
-- `404` if a user with `username` does not exist
-- `404` if a circle with `circlename` does not exist
-- `409` if the user is already in the circle
+- `403` If the user is not logged in
+- `400` If circlename is not provided
+- `404` If circle membership does not exist
 
-#### `DELETE /api/circles/:circlename?` - Remove a user from the circle
-
-**Body**
-- `username` _{string}_ - the username of the account to remove from cirlce
+#### `GET /api/circles` - Get all the circle memberships of the logged in user
 
 **Returns**
-- A success message
+- An array of all circle memberships belonging to the user
 
 **Throws**
-- `403` if the user is not logged in
-- `400` if `username` is not provided
-- `404` if a user with `username` does not exist
-- `404` if a circle with `circlename` does not exist
-- `404` if the user is not in the circle
+- `403` If the user is not logged in
+
+#### `GET /api/circles?circlename=circlename`
+- Get all the circle memberships belonging to circle `circlename` owned by the logged in user
+
+**Returns**
+- An array of all circle memberships with `circlename` belonging to the logged in user
+
+**Throws**
+- `403` If the user is not logged in
+- `400` If circlename is not provided
+- `404` If circle membership does not exist
+
+#### `GET /api/circles/members?username=username` - Get all the circle memberships that user with `username` is in from the circles owned by the logged in user
+
+**Returns**
+- An array of all circle memberships with member `username` belonging to the logged in user
+
+**Throws**
+- `403` If the user is not logged in
+- `400` If username is not provided
+- `404` If user with `username` does not exist
+- `409` If username belongs to logged in user
 
 #### `PUT /api/freets/:freetId?` - Update the content or access of a freet
 
