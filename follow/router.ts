@@ -3,6 +3,7 @@ import express from 'express';
 import FreetCollection from '../freet/collection';
 import UserCollection from '../user/collection';
 import FollowCollection from './collection';
+import CircleCollection from '../circle/collection';
 import * as userValidator from '../user/middleware';
 import * as followValidator from '../follow/middleware'
 import * as util from './util';
@@ -43,7 +44,7 @@ router.post(
 /**
  * Unfollow a user.
  *
- * @name DELETE /api/follows/:username
+ * @name DELETE /api/follows/following/:username
  *
  * @return {string} - A success message
  * @throws {403} - If the user is not logged in
@@ -62,6 +63,13 @@ router.delete(
         const userId = (req.session.userId as string) ?? '';
         const following = await UserCollection.findOneByUsername(req.params.username);
         await FollowCollection.deleteOne(userId,following._id);
+
+        const follow = await FollowCollection.findOne(userId, following._id);
+        // if follow relationship no longer exists, remove them from each others' circles
+        if (!follow){
+            CircleCollection.deleteManyByOwnerAndMember(userId,following._id);
+            CircleCollection.deleteManyByOwnerAndMember(following._id,userId);
+        }
 
         res.status(200).json({
             message: `Your unfollowed ${req.params.username} successfully.`,
@@ -91,6 +99,13 @@ router.delete(
         const userId = (req.session.userId as string) ?? '';
         const following = await UserCollection.findOneByUsername(req.params.username);
         await FollowCollection.deleteOne(following._id,userId);
+
+        const follow = await FollowCollection.findOne(userId, following._id);
+        // if follow relationship no longer exists, remove them from each others' circles
+        if (!follow){
+            CircleCollection.deleteManyByOwnerAndMember(userId,following._id);
+            CircleCollection.deleteManyByOwnerAndMember(following._id,userId);
+        }
 
         res.status(200).json({
             message: `You removed ${req.params.username} from your followers successfully.`,
