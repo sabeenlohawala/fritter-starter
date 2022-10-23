@@ -313,7 +313,58 @@ The following are API routes that I have implemented:
 - `404` If user with `username` does not exist
 - `409` If username belongs to logged in user
 
-#### `PUT /api/freets/:freetId?` - Update the content or access of a freet
+#### `POST /api/mutes` - Create new mute
+
+**Body**
+- `phrase` _{string}_ - the word or phrase to mute
+- `account` _{string}_ - the username of the individual user to mute
+- `circlename` _{string}_ - the circlename of the Circle to mute
+- `durationHours` _{string}_ - the amount of hours for mute to remain active from creation time
+- `durationMins` _{string}_ - the amount of minutes for mute to remain active from creation time
+- `startHours` _{string}_ - the hour at which the mute time period starts
+- `startMins` _{string}_ - the minute at which the mute time period starts
+- `endHours` _{string}_ - the hour at which the mute time period ends
+- `endMins` _{string}_ - the minute at which the mute time period ends
+
+**Returns**
+- A success message
+- An object containing the created Mute
+
+**Throws**
+- `403` if user is not logged in
+- `400` if not at least one phrase, account, or circle specified
+- `400` if specified circle does not exist
+- `400` if spefified account does not exist
+
+#### `DELETE /api/mutes/:muteId` - Deletes the mute with the given id
+
+**Returns**
+- A success message
+
+**Throws**
+- `403` if the user is not logged in
+- `404` if a mute with the ID is not found
+- `403` if the logged in user is not the owner of the mute
+
+#### `GET /api/mutes` - Gets all the Mutes of the logged in user
+
+**Returns**
+- An array of all the mutes owned by the logged in user
+
+**Throws**
+- `403` if the user is not logged in
+
+#### `GET /api/feeds`
+- Gets the feed of the logged in user
+
+**Returns**
+- An array of all the Freets the user can view based on their mute rules
+
+**Throws**
+- `403` if the user is not logged in
+
+#### `PUT /api/freets/:freetId?` 
+- Update the content or access of a freet
 
 **Body**
 - `content` _{string}_ - the updated content of freet, if any
@@ -328,20 +379,6 @@ The following are API routes that I have implemented:
 - `404` if a freet with `freetId` does not exist
 - `404` if a circle with `circlename` does not exist
 - `409` if the circle already has access
-
-#### `DELETE /api/freets/:freetId?` - Remove Freet access
-
-**Body**
-- `circlename` _{string}_ - the circlename of the circle to remove access for
-
-**Returns**
-- A success message
-
-**Throws**
-- `403` if the user is not logged in
-- `400` if `circlename` is not provided
-- `404` if a circle with `circlename` does not exist
-- `409` if the circle does not already have access
 
 The following api routes have already been implemented for you (**Make sure to document all the routes that you have added.**):
 
