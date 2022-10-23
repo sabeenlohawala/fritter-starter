@@ -54,6 +54,8 @@ const formsAndHandlers = {
   'delete-mute': deleteMute,
   'view-my-mutes': viewMyMutes,
   'view-my-feed': viewMyFeed,
+  'edit-freet-circlename': editFreet,
+  'remove-freet-circlename': editFreet,
 };
 
 // Attach handlers to forms

@@ -55,7 +55,6 @@ import CircleCollection from './collection';
  * Checks if user has any circle with circlename provided in req.params.
  */
 const isCircleParamExists = async(req:Request, res:Response, next:NextFunction) => {
-    console.log('param')
     if (!req.params.circlename){
         res.status(400).json({
             error: 'Provided circlename must be nonempty.'
@@ -81,7 +80,6 @@ const isCircleParamExists = async(req:Request, res:Response, next:NextFunction) 
  * Checks if user has any circle with circlename provided in req.query.
  */
 const isCircleQueryExists = async(req:Request, res:Response, next:NextFunction) => {
-    console.log('query')
     if (!req.query.circlename){
         res.status(400).json({
             error: 'Provided circlename must be nonempty.'
@@ -103,9 +101,30 @@ const isCircleQueryExists = async(req:Request, res:Response, next:NextFunction) 
     next();
 }
 
+/**
+ * Checks if user has any circle with circlename provided in req.params.
+ */
+ const isOptionalCircleBodyExists = async(req:Request, res:Response, next:NextFunction) => {
+    if (req.body.circlename){
+        const userId = (req.session.userId as string) ?? '';
+        const circle = await CircleCollection.findOne(req.body.circlename, userId);
+
+        if (!circle){
+            res.status(404).json({
+                error: {
+                    circleNotFound: `The circle ${req.body.circlename} does not exist.`
+                }
+            });
+            return;
+        }
+    }
+    next();
+}
+
 export{
     isCircleAlreadyExists,
     isCircleMemberDoesNotExist,
     isCircleParamExists,
-    isCircleQueryExists
+    isCircleQueryExists,
+    isOptionalCircleBodyExists,
 }

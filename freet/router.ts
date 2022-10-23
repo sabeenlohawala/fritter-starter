@@ -3,6 +3,7 @@ import express from 'express';
 import FreetCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as freetValidator from '../freet/middleware';
+import * as circleValidator from '../circle/middleware';
 import * as util from './util';
 
 const router = express.Router();
@@ -33,8 +34,9 @@ router.get(
       next();
       return;
     }
-
-    const allFreets = await FreetCollection.findAll();
+    let userId = (req.session.userId as string) ?? '';
+    if (userId === ''){userId = undefined};
+    const allFreets = await FreetCollection.findAllAccessible(userId);
     const response = allFreets.map(util.constructFreetResponse);
     res.status(200).json(response);
   },
@@ -42,7 +44,9 @@ router.get(
     userValidator.isAuthorExists
   ],
   async (req: Request, res: Response) => {
-    const authorFreets = await FreetCollection.findAllByUsername(req.query.author as string);
+    let userId = (req.session.userId as string) ?? '';
+    if (userId === ''){userId = undefined};
+    const authorFreets = await FreetCollection.findAllAccessibleByUsername(req.query.author as string,userId);
     const response = authorFreets.map(util.constructFreetResponse);
     res.status(200).json(response);
   }
@@ -63,11 +67,12 @@ router.post(
   '/',
   [
     userValidator.isUserLoggedIn,
-    freetValidator.isValidFreetContent
+    freetValidator.isValidFreetContent,
+    circleValidator.isOptionalCircleBodyExists
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const freet = await FreetCollection.addOne(userId, req.body.content);
+    const freet = await FreetCollection.addOne(userId, req.body.content, req.body.circlename);
 
     res.status(201).json({
       message: 'Your freet was created successfully.',
@@ -120,10 +125,21 @@ router.put(
     userValidator.isUserLoggedIn,
     freetValidator.isFreetExists,
     freetValidator.isValidFreetModifier,
-    freetValidator.isValidFreetContent
+    freetValidator.isValidUpdateContent,
+    circleValidator.isOptionalCircleBodyExists
   ],
   async (req: Request, res: Response) => {
-    const freet = await FreetCollection.updateOne(req.params.freetId, req.body.content);
+    let freet = undefined;
+
+    if (req.body.content){
+      freet = await FreetCollection.updateOne(req.params.freetId, req.body.content);
+    }
+    else if (req.body.circlename){
+      freet = await FreetCollection.updateOneCirclename(req.params.freetId, req.body.circlename);
+    }
+    else{
+      freet = await FreetCollection.updateOneRemoveCirclename(req.params.freetId);
+    }
     res.status(200).json({
       message: 'Your freet was updated successfully.',
       freet: util.constructFreetResponse(freet)
