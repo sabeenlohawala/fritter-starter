@@ -22,6 +22,8 @@ type MuteResponse = {
  */
 const formatDate = (date: Date): string => moment(date).format('MMMM Do YYYY, h:mm:ss a');
 
+const formatTime = (date:Date): string => moment(date).format('h:mm:ss a');
+
 /**
  * Transform a raw Mute object from the database into an object
  * with all the information needed by the frontend
@@ -38,8 +40,8 @@ const constructMuteResponse = (mute: HydratedDocument<Mute>): MuteResponse => {
     const owner = muteCopy.owner.username;
     const account = !muteCopy.account? undefined : (muteCopy.account.username);
     const durationEnd = !muteCopy.durationEnd? undefined : formatDate(muteCopy.durationEnd);
-    const startTime = !muteCopy.startTime? undefined : formatDate(muteCopy.startTime);
-    const endTime = !muteCopy.startTime? undefined : formatDate(muteCopy.endTime);
+    const startTime = !muteCopy.startTime? undefined : formatTime(muteCopy.startTime);
+    const endTime = !muteCopy.startTime? undefined : formatTime(muteCopy.endTime);
 
     return {
         ...muteCopy,
