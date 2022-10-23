@@ -53,6 +53,7 @@ const formsAndHandlers = {
   'create-mute': createMute,
   'delete-mute': deleteMute,
   'view-my-mutes': viewMyMutes,
+  'view-my-feed': viewMyFeed,
 };
 
 // Attach handlers to forms

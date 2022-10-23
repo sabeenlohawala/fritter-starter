@@ -10,6 +10,7 @@
   <script src="/scripts/follow.js"></script>
   <script src="/scripts/circle.js"></script>
   <script src="/scripts/mute.js"></script>
+  <script src="/scripts/feed.js"></script>
   <script src="/scripts/index.js"></script>
 </head>
 
@@ -22,6 +23,11 @@
     <section id="operations-container">
       <h2>Operations:</h2>
       <div class="scrollbox">
+
+        <form id="view-my-feed">
+          <h3>View My Feed</h3>
+          <input type="submit" value="View My Feed">
+        </form>
 
         <form id="create-mute">
           <h3>Create Mute</h3>
@@ -101,32 +107,32 @@
           <input type="submit" value="View My Circles">
         </form>
 
-      <form id="view-circles-by-circlename">
-        <h3>View Circle Members By Circlename</h3>
-        <div>
-          <label for="circlename">Circle Name:</label>
-          <input id="circlename" name="circlename">
-        </div>
-        <input type="submit" value="Submit">
-      </form>
+        <form id="view-circles-by-circlename">
+          <h3>View Circle Members By Circlename</h3>
+          <div>
+            <label for="circlename">Circle Name:</label>
+            <input id="circlename" name="circlename">
+          </div>
+          <input type="submit" value="Submit">
+        </form>
 
-      <form id="view-circles-by-member">
-        <h3>View Circles Containing Member</h3>
-        <div>
-          <label for="username">Member Username:</label>
-          <input id="username" name="username">
-        </div>
-        <input type="submit" value="Submit">
-      </form>
+        <form id="view-circles-by-member">
+          <h3>View Circles Containing Member</h3>
+          <div>
+            <label for="username">Member Username:</label>
+            <input id="username" name="username">
+          </div>
+          <input type="submit" value="Submit">
+        </form>
 
-      <form id="delete-circle">
-        <h3>Delete Circle</h3>
-        <div>
-          <label for="circlename">Circle Name:</label>
-          <input id="circlename" name="circlename">
-        </div>
-        <input type="submit" value="Delete Circle">
-      </form>
+        <form id="delete-circle">
+          <h3>Delete Circle</h3>
+          <div>
+            <label for="circlename">Circle Name:</label>
+            <input id="circlename" name="circlename">
+          </div>
+          <input type="submit" value="Delete Circle">
+        </form>
 
         <form id="follow-user">
           <h3>Follow User</h3>
@@ -222,7 +228,7 @@
         <form id="view-all-freets">
             <h3>View All Freets</h3>
             <input type="submit" value="View All Freets">
-          </form>
+        </form>
 
         <form id="view-freets-by-author">
           <h3>View Freets By Author</h3>

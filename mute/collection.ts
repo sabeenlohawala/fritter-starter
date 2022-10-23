@@ -91,6 +91,69 @@ class MuteCollection{
         return MuteModel.find({owner: owner}).populate(['owner','account']);
     }
 
+    /**
+     * Get all the mutes belonging to the owner in the database that would currently apply
+     *
+     * @return {Promise<HydratedDocument<Mute>[]>} - An array of all of the freets
+     */
+     static async findAllRelevant(owner: Types.ObjectId | string): Promise<Array<HydratedDocument<Mute>>> {
+        // delete all Mutes whose duration has expired
+        const now = new Date();
+        now.setSeconds(0);
+
+        await this.cleanUpMutes(owner, now);
+
+        const allMutes = await MuteCollection.findAll(owner);
+
+        const relevantMutes = [];
+        for (const mute of allMutes){
+            // delete the mute if the duration has expired
+            // remove mute From list if not within start/endTime
+            // keep the mute if no duration and no start/endTime
+            // keep all other mutes
+            if (mute.startTime){
+                // check if now is within the interval
+                const todayStart = new Date();
+                now.setSeconds(0);
+                const todayEnd = new Date();
+                now.setSeconds(0);
+
+                const startHoursMins = [mute.startTime.getHours(),mute.startTime.getMinutes()];
+                const endHoursMins = [mute.endTime.getHours(),mute.endTime.getMinutes()];
+                todayStart.setHours(startHoursMins[0]);
+                todayStart.setMinutes(startHoursMins[1]);
+                todayEnd.setHours(endHoursMins[0]);
+                todayEnd.setMinutes(endHoursMins[1]);
+                if (todayEnd < todayStart){
+                    todayEnd.setTime(todayEnd.getTime() + 24*60*60*1000);
+                }
+
+                if (todayStart <= now && now <= todayEnd){
+                    relevantMutes.push(mute);
+                }
+            }
+            else{
+                relevantMutes.push(mute);
+            }
+        }
+        return relevantMutes;
+    }
+
+    static async cleanUpMutes(owner: Types.ObjectId | string, now:Date) : Promise<void>{
+        const allMutes = await MuteCollection.findAll(owner);
+
+        const mutesToDelete:Types.ObjectId[] = [];
+        for (const mute of allMutes){
+            // delete the mute if the duration has expired
+            if (mute.durationEnd && mute.durationEnd < now){
+                mutesToDelete.push(mute._id);
+            }
+        }
+        for (const muteId of mutesToDelete){
+            await MuteCollection.deleteOne(muteId);
+        }
+    }
+
     static formatDurationEnd(duration:[string,string] | undefined) : Date | undefined {
         let durationEnd = undefined;
         if (duration !== undefined && (duration[0] !== '' || duration[1] !=='')){
