@@ -6,6 +6,8 @@ import * as freetValidator from '../freet/middleware';
 import * as muteValidator from '../mute/middleware';
 import * as util from './util';
 import UserCollection from '../user/collection';
+import CircleCollection from '../circle/collection';
+import FollowCollection from '../follow/collection';
 
 const router = express.Router();
 
@@ -24,6 +26,7 @@ const router = express.Router();
     '/',
     [
       userValidator.isUserLoggedIn,
+      muteValidator.isMuteBodyValid,
     ],
     async (req: Request, res: Response) => {
         const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
@@ -31,15 +34,6 @@ const router = express.Router();
         const user = (req.body.account)? await UserCollection.findOneByUsername(req.body.account) : undefined;
         const account = user? user._id : undefined;
         const circlename = req.body.circlename;
-
-        if (!phrase && !account && !circlename){
-            res.status(400).json({
-                error: {
-                    freetNotFound: `Mute must contain a word/phrase, account, or circle.`
-                }
-              });
-              return;
-        }
 
         // set up durationEnd
         const durationHours = (req.body.durationHours) ? req.body.durationHours : undefined;
@@ -76,7 +70,7 @@ const router = express.Router();
 /**
  * Delete a mute.
  *
- * @name DELETE /api/mutes/:id
+ * @name DELETE /api/mutes/:muteId
  *
  * @return {string} - A success message
  * @throws {403} - If the user is not logged in or is not the author of
@@ -117,9 +111,5 @@ const router = express.Router();
       res.status(200).json(response);
     }
   );
-
-
-// update mute rule (change word/phrase, change account, change circle, change duration, change time period)
-// get all mutes
 
 export {router as muteRouter};

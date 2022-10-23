@@ -1,7 +1,9 @@
 import type {Request, Response, NextFunction} from 'express';
 import {Types} from 'mongoose';
-import UserCollection from 'user/collection';
+import UserCollection from '../user/collection';
 import MuteCollection from '../mute/collection';
+import FollowCollection from '../follow/collection';
+import CircleCollection from '../circle/collection';
 
 /**
  * Checks if a mute with muteId is req.params exists
@@ -36,9 +38,52 @@ const isMuteParamExists = async (req: Request, res: Response, next: NextFunction
     }
   
     next();
-  };
+};
+
+const isMuteBodyValid = async (req: Request, res: Response, next: NextFunction) => {
+    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
+    const phrase = req.body.phrase;
+    const user = (req.body.account)? await UserCollection.findOneByUsername(req.body.account) : undefined;
+    const account = user? user._id : undefined;
+    const circlename = req.body.circlename;
+
+    if (!phrase && !account && !circlename){
+        res.status(400).json({
+            error: {
+                invalidMute: `Mute must contain a word/phrase, an active account, or existing circlename.`
+            }
+            });
+            return;
+    }
+
+    if (circlename){
+        const circle = await CircleCollection.findOne(circlename,userId);
+        if (!circle){
+            res.status(400).json({
+                error: {
+                    circleNotFound: `The specified circle does not exist.`
+                }
+            });
+            return;
+        }
+    }
+
+    if (account){
+        const follow = await FollowCollection.findOne(userId,account);
+        if (!follow){
+            res.status(400).json({
+                error: {
+                    followNotFound: `You are not following account ${req.body.account}.`
+                }
+            });
+            return;
+        }
+    }
+    next();
+}
 
 export{
     isMuteParamExists,
     isMuteOwner,
+    isMuteBodyValid,
 }
