@@ -6,6 +6,7 @@ import * as userValidator from '../user/middleware';
 import * as util from './util';
 import FollowCollection from '../follow/collection';
 import CircleCollection from '../circle/collection';
+import MuteCollection from '../mute/collection';
 
 const router = express.Router();
 
@@ -146,6 +147,7 @@ router.delete(
     await FollowCollection.deleteMany(userId);
     await CircleCollection.deleteManyByMember(userId);
     await CircleCollection.deleteManyByOwner(userId);
+    await MuteCollection.deleteMany(userId);
     req.session.userId = undefined;
     res.status(200).json({
       message: 'Your account has been deleted successfully.'

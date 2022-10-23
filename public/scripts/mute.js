@@ -3,3 +3,15 @@ function createMute(fields) {
       .then(showResponse)
       .catch(showResponse);
 }
+
+function deleteMute(fields) {
+    fetch(`/api/mutes/${fields.muteId}`, {method: 'DELETE',})
+      .then(showResponse)
+      .catch(showResponse);
+}
+
+function viewMyMutes(fields) {
+    fetch('/api/mutes')
+      .then(showResponse)
+      .catch(showResponse);
+  }

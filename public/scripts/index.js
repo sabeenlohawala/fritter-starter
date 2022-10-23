@@ -51,6 +51,8 @@ const formsAndHandlers = {
   'view-circles-by-member': viewCirclesByMember,
   'delete-circle': deleteCircle,
   'create-mute': createMute,
+  'delete-mute': deleteMute,
+  'view-my-mutes': viewMyMutes,
 };
 
 // Attach handlers to forms
